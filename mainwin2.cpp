@@ -1,6 +1,8 @@
 #include "mainwin2.h"
-#include "qnetworkdatagram.h"
 #include "ui_mainwin2.h"
+#include "qnetworkdatagram.h"
+#include "receiverecodewgt.h"
+#include "../../../Library/Logger/log.h"
 
 #include <QDateTime>
 
@@ -32,22 +34,41 @@ void MainWin2::processTheDatagram(const QNetworkDatagram &data)
 
     ui->LEditReceiveAddress->setText(sendAddress);
     ui->TEditReceive->setPlainText(strData);
+    m_recodeWgr->recode(strData);
 }
 
 void MainWin2::init()
 {
+    initLogger();
     initUI();
     initReceiveWin();
 }
 
 void MainWin2::initUI()
 {
+    // 主窗口
     this->resize(1000,600);
     this->setWindowTitle(tr("UDP发送接收测试工具"));
     this->setWindowIcon(QIcon(":/bm_10.png"));
 
+    // 时间戳
     ui->checkTimeStamp->setChecked(true);
     connect(ui->btnSend,&QPushButton::clicked,this,&MainWin2::send);
+
+    // 历史记录
+    m_recodeWgr = new ReceiveRecodeWgt(this);
+    this->ui->centralwidget->layout()->addWidget(m_recodeWgr);
+    m_recodeWgr->hide();
+    connect(this->ui->btnReceiveLog,&QPushButton::clicked,this,&MainWin2::setRecodeWgtShow);
+
+    // 默认端口
+    ui->LEditSendPort->setText(QString::number(m_defenePort));
+    ui->LEditReceivePort->setText(QString::number(m_defenePort));
+}
+
+void MainWin2::initLogger()
+{
+    LOG.setWriteToFile(true);
 }
 
 void MainWin2::initReceiveWin()
@@ -55,7 +76,7 @@ void MainWin2::initReceiveWin()
     ui->btnReceiveEnable->setCheckable(true);
     ui->LEditReceiveAddress->setEnabled(false);
 
-//    ui->TEditReceive->setEnabled(false);
+    ui->TEditReceive->setReadOnly(true);
 
     connect(ui->btnReceiveEnable,&QPushButton::clicked,this,&MainWin2::setReceiveEnable);
     connect(ui->LEditReceivePort,&QLineEdit::textChanged,[=](){
@@ -95,6 +116,19 @@ void MainWin2::setReceiveEnable(bool enable)
         }
         ui->btnReceiveEnable->setText(tr("开启端口监听"));
     }
+}
+
+void MainWin2::setRecodeWgtShow(bool isShow)
+{
+
+    if(isShow){
+        m_recodeWgr->show();
+        resize(this->width()*3/2,this->height());
+    }else{
+        m_recodeWgr->hide();
+        resize(this->width()*2/3,this->height());
+    }
+
 }
 
 

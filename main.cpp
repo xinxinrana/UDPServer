@@ -1,4 +1,3 @@
-#include "mainwin.h"
 #include "mainwin2.h"
 
 #include <QApplication>

@@ -21,9 +21,9 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,-rpath,/usr/local/Qt6.
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwin.cpp
-        mainwin.h
-        mainwin.ui
+
+
+
         icon.rc
 )
 
@@ -32,10 +32,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(UDPServer
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
-        myudpserver.h myudpserver.cpp
+
         mainwin2.h mainwin2.cpp mainwin2.ui
         qrc.qrc
-        NetWorkWgts/AbstractWgt.cpp NetWorkWgts/AbstractWgt.h NetWorkWgts/AbstractWgt.ui
+        ../../../Library/Logger/baselogger.cpp ../../../Library/Logger/baselogger.h ../../../Library/Logger/log.cpp ../../../Library/Logger/log.h
+        receiverecodewgt.ui receiverecodewgt.h receiverecodewgt.cpp
+
     )
 
 ## 添加图标

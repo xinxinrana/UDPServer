@@ -1,6 +1,10 @@
 #ifndef ABSTRACTWGT_H
 #define ABSTRACTWGT_H
 
+namespace Ui {
+class AbstractWgt;
+}
+
 #include <QWidget>
 class AbstractWgt :public QWidget
 {
@@ -11,7 +15,7 @@ public:
     explicit AbstractWgt(QObject* parent);
     QObject *QWidget;
 
-
+    Ui::AbstractWgt* ui;
 };
 
 
